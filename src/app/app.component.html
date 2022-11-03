@@ -1,0 +1,70 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label for="name">Name Campaign: </label>
+  <input formControlName="name" id="name" />
+
+  <div
+    cdkDropList
+    class="example-list"
+    (cdkDropListDropped)="drop($event)"
+    formArrayName="layouts"
+    style="box-shadow: inset 0 1px 2px 1px rgb(0 0 0 / .2); padding: 10px; width: max-content; margin: 10px 0"
+  >
+    <div
+      [id]="i"
+      cdkDrag
+      #elem="cdkDrag"
+      *ngFor="let layout of layouts.controls; let i = index"
+      style="margin-top: 10px; box-shadow: 0 1px 2px 1px rgb(0 0 0 / .2); padding: 15px; background: white;"
+    >
+      <form [formGroupName]="i">
+        <div style="display: flex;">
+          <div>
+            <label for="name-{{ i }}">Name Layout:</label>
+            <div>
+              <input
+                class="form-control"
+                id="name-{{ i }}"
+                type="text"
+                formControlName="layoutName"
+              />
+            </div>
+          </div>
+          <div>
+            <label for="duration-{{ i }}">Duration Layout:</label>
+            <div>
+              <input
+                id="duration-{{ i }}"
+                type="text"
+                formControlName="duration"
+              />
+            </div>
+          </div>
+          <div>
+            <label for="content-{{ i }}">Content Layout:</label>
+            <div>
+              <!-- <select id="content-{{ i }}" formControlName="content">
+                <option *ngFor="let cont of obs$ | async" [value]="cont.id">
+                  {{ cont | json }}
+                </option>
+              </select> -->
+              <ng-select
+                [items]="obs$ | async"
+                bindLabel="name"
+                bindValue="id"
+              ></ng-select>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <button type="submit">Submit</button>
+  <button style="margin-top: 15px" type="button" (click)="addLayout()">
+    + Add another layout
+  </button>
+</form>
+
+{{ form.value | json }}
+<input type="text" [formControl]="search">
+<div *ngFor="let ob of res$ | async">{{ ob.id }}</div>
